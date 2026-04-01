@@ -1808,7 +1808,7 @@ class TestTypecheck < Minitest::Test
     assert_equal 2, r
   end
 
-
+# Fails this test case:
   def test_case_when_nil_body
     self.class.class_eval "class A5; end"
     TestTypecheck::A5.class_eval do
