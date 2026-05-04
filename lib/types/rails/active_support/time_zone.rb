@@ -1,2 +1,2 @@
-RDL.nowrap :'ActiveSupport::TimeZone'
-RDL.type :'ActiveSupport::TimeZone', :now, '() -> ActiveSupport::TimeWithZone'
+QDL.nowrap :'ActiveSupport::TimeZone'
+QDL.type :'ActiveSupport::TimeZone', :now, '() -> ActiveSupport::TimeWithZone'

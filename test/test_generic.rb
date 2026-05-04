@@ -1,10 +1,10 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
-RDL.reset
+require 'qdl'
+QDL.reset
 
 class TestGeneric < Minitest::Test
-  extend RDL::Annotate
+  extend QDL::Annotate
 
   # Make two classes that wrap Array and Hash, so we don't mess with their
   # implementations in test case evaluation.
@@ -23,7 +23,7 @@ class TestGeneric < Minitest::Test
   end
 
   class B
-    extend RDL::Annotate
+    extend QDL::Annotate
     # class for checking other variance annotations
     def m1(x) # type annotation
       nil
@@ -45,24 +45,24 @@ class TestGeneric < Minitest::Test
 
 
   def setup
-    RDL.reset
-    RDL.type_params A, [:t], :all?
-    RDL.type_params H, [:k, :v], :all?
-    RDL.type_params(B, [:a, :b], nil, variance: [:+, :-]) { |a, b| true }
-    RDL.type B, :m1, "(a) -> nil"
-    RDL.type C, :m1, "() -> self"
-    RDL.type C, :m2, "() -> self"
-    RDL.type C, :m3, "() -> self"
-    @ta = RDL::Type::NominalType.new "TestGeneric::A"
-    @th = RDL::Type::NominalType.new "TestGeneric::H"
-    @tas = RDL::Type::GenericType.new(@ta, RDL::Globals.types[:string])
-    @tao = RDL::Type::GenericType.new(@ta, RDL::Globals.types[:object])
-    @taas = RDL::Type::GenericType.new(@ta, @tas)
-    @taao = RDL::Type::GenericType.new(@ta, @tao)
-    @thss = RDL::Type::GenericType.new(@th, RDL::Globals.types[:string], RDL::Globals.types[:string])
-    @thoo = RDL::Type::GenericType.new(@th, RDL::Globals.types[:object], RDL::Globals.types[:object])
-    @thsf = RDL::Type::GenericType.new(@th, RDL::Globals.types[:string], RDL::Globals.types[:integer])
-    @tb = RDL::Type::NominalType.new "TestGeneric::B"
+    QDL.reset
+    QDL.type_params A, [:t], :all?
+    QDL.type_params H, [:k, :v], :all?
+    QDL.type_params(B, [:a, :b], nil, variance: [:+, :-]) { |a, b| true }
+    QDL.type B, :m1, "(a) -> nil"
+    QDL.type C, :m1, "() -> self"
+    QDL.type C, :m2, "() -> self"
+    QDL.type C, :m3, "() -> self"
+    @ta = QDL::Type::NominalType.new "TestGeneric::A"
+    @th = QDL::Type::NominalType.new "TestGeneric::H"
+    @tas = QDL::Type::GenericType.new(@ta, QDL::Globals.types[:string])
+    @tao = QDL::Type::GenericType.new(@ta, QDL::Globals.types[:object])
+    @taas = QDL::Type::GenericType.new(@ta, @tas)
+    @taao = QDL::Type::GenericType.new(@ta, @tao)
+    @thss = QDL::Type::GenericType.new(@th, QDL::Globals.types[:string], QDL::Globals.types[:string])
+    @thoo = QDL::Type::GenericType.new(@th, QDL::Globals.types[:object], QDL::Globals.types[:object])
+    @thsf = QDL::Type::GenericType.new(@th, QDL::Globals.types[:string], QDL::Globals.types[:integer])
+    @tb = QDL::Type::NominalType.new "TestGeneric::B"
   end
 
   def test_le
@@ -86,10 +86,10 @@ class TestGeneric < Minitest::Test
     assert (not (@thss <= @th))
 
     # Check co- and contravariance using B
-    tbss = RDL::Type::GenericType.new(@tb, RDL::Globals.types[:string], RDL::Globals.types[:string])
-    tbso = RDL::Type::GenericType.new(@tb, RDL::Globals.types[:string], RDL::Globals.types[:object])
-    tbos = RDL::Type::GenericType.new(@tb, RDL::Globals.types[:object], RDL::Globals.types[:string])
-    tboo = RDL::Type::GenericType.new(@tb, RDL::Globals.types[:object], RDL::Globals.types[:object])
+    tbss = QDL::Type::GenericType.new(@tb, QDL::Globals.types[:string], QDL::Globals.types[:string])
+    tbso = QDL::Type::GenericType.new(@tb, QDL::Globals.types[:string], QDL::Globals.types[:object])
+    tbos = QDL::Type::GenericType.new(@tb, QDL::Globals.types[:object], QDL::Globals.types[:string])
+    tboo = QDL::Type::GenericType.new(@tb, QDL::Globals.types[:object], QDL::Globals.types[:object])
     assert (tbss <= tbss)
     assert (not (tbss <= tbso))
     assert (tbss <= tbos)
@@ -109,19 +109,19 @@ class TestGeneric < Minitest::Test
   end
 
   def test_le_structural
-    tbss = RDL::Type::GenericType.new(@tb, RDL::Globals.types[:string], RDL::Globals.types[:string])
-    tma = RDL::Type::MethodType.new([], nil, RDL::Globals.types[:nil])
-    tmb = RDL::Type::MethodType.new([RDL::Globals.types[:string]], nil, RDL::Globals.types[:nil])
-    tmc = RDL::Type::MethodType.new([RDL::Globals.types[:integer]], nil, RDL::Globals.types[:nil])
-    ts1 = RDL::Type::StructuralType.new(m2: tma)
+    tbss = QDL::Type::GenericType.new(@tb, QDL::Globals.types[:string], QDL::Globals.types[:string])
+    tma = QDL::Type::MethodType.new([], nil, QDL::Globals.types[:nil])
+    tmb = QDL::Type::MethodType.new([QDL::Globals.types[:string]], nil, QDL::Globals.types[:nil])
+    tmc = QDL::Type::MethodType.new([QDL::Globals.types[:integer]], nil, QDL::Globals.types[:nil])
+    ts1 = QDL::Type::StructuralType.new(m2: tma)
     assert (tbss <= ts1)
-    ts2 = RDL::Type::StructuralType.new(m1: tmb)
+    ts2 = QDL::Type::StructuralType.new(m1: tmb)
     assert (tbss <= ts2)
-    ts3 = RDL::Type::StructuralType.new(m1: tmb, m2: tma)
+    ts3 = QDL::Type::StructuralType.new(m1: tmb, m2: tma)
     assert (tbss <= ts3)
-    ts4 = RDL::Type::StructuralType.new(m1: tmc, m2: tma)
+    ts4 = QDL::Type::StructuralType.new(m1: tmc, m2: tma)
     assert (not (tbss <= ts4))
-    ts5 = RDL::Type::StructuralType.new(m1: tmb, m2: tmc)
+    ts5 = QDL::Type::StructuralType.new(m1: tmb, m2: tmc)
     assert (tbss <= ts5)
   end
 
@@ -129,7 +129,7 @@ class TestGeneric < Minitest::Test
     c = C.new
     assert(c.m1)
     assert(c.m2)
-    assert_raises(RDL::Type::TypeError) { c.m3 }
+    assert_raises(QDL::Type::TypeError) { c.m3 }
     assert(D.new.m1)
   end
 
@@ -147,53 +147,53 @@ class TestGeneric < Minitest::Test
   end
 
   def test_instantiate
-    assert_raises(RuntimeError) { RDL.instantiate!(Object.new, RDL::Globals.types[:string]) }
+    assert_raises(RuntimeError) { QDL.instantiate!(Object.new, QDL::Globals.types[:string]) }
 
     # Array<String>
-    assert (RDL.instantiate!(A.new([]), 'String'))
-    assert (RDL.instantiate!(A.new(["a", "b", "c"]), RDL::Globals.types[:string], check: true))
-    assert (RDL.instantiate!(A.new(["a", "b", "c"]), 'String', check: true))
-    assert_raises(RDL::Type::TypeError) { RDL.instantiate!(A.new([1, 2, 3]), 'String', check: true) }
-    assert (RDL.instantiate!(A.new([1, 2, 3]), 'String', check: false))
+    assert (QDL.instantiate!(A.new([]), 'String'))
+    assert (QDL.instantiate!(A.new(["a", "b", "c"]), QDL::Globals.types[:string], check: true))
+    assert (QDL.instantiate!(A.new(["a", "b", "c"]), 'String', check: true))
+    assert_raises(QDL::Type::TypeError) { QDL.instantiate!(A.new([1, 2, 3]), 'String', check: true) }
+    assert (QDL.instantiate!(A.new([1, 2, 3]), 'String', check: false))
 
     # Array<Object>
-    assert (RDL.instantiate!(A.new([]), 'Object', check: true))
-    assert (RDL.instantiate!(A.new(["a", "b", "c"]), RDL::Globals.types[:object], check: true))
-    assert (RDL.instantiate!(A.new(["a", "b", "c"]), 'Object', check: true))
-    assert (RDL.instantiate!(A.new([1, 2, 3]), 'Object', check: true))
+    assert (QDL.instantiate!(A.new([]), 'Object', check: true))
+    assert (QDL.instantiate!(A.new(["a", "b", "c"]), QDL::Globals.types[:object], check: true))
+    assert (QDL.instantiate!(A.new(["a", "b", "c"]), 'Object', check: true))
+    assert (QDL.instantiate!(A.new([1, 2, 3]), 'Object', check: true))
 
     # Hash<String, Integer>
-    assert (RDL.instantiate!(H.new({}), 'String', 'Integer', check: true))
-    assert (RDL.instantiate!(H.new({"one"=>1, "two"=>2}), 'String', 'Integer', check: true))
-    assert_raises(RDL::Type::TypeError) {
-      RDL.instantiate!(H.new(one: 1, two: 2), 'String', 'Integer', check: true)
+    assert (QDL.instantiate!(H.new({}), 'String', 'Integer', check: true))
+    assert (QDL.instantiate!(H.new({"one"=>1, "two"=>2}), 'String', 'Integer', check: true))
+    assert_raises(QDL::Type::TypeError) {
+      QDL.instantiate!(H.new(one: 1, two: 2), 'String', 'Integer', check: true)
     }
-    assert (RDL.instantiate!(H.new(one: 1, two: 2), 'String', 'Integer', check: false))
-    assert_raises(RDL::Type::TypeError){
-      RDL.instantiate!(H.new({"one"=>:one, "two"=>:two}), 'String', 'Integer', check: true)
+    assert (QDL.instantiate!(H.new(one: 1, two: 2), 'String', 'Integer', check: false))
+    assert_raises(QDL::Type::TypeError){
+      QDL.instantiate!(H.new({"one"=>:one, "two"=>:two}), 'String', 'Integer', check: true)
     }
 
     # Hash<Object, Object>
-    assert (RDL.instantiate!(H.new({}), 'Object', 'Object', check: true))
-    assert (RDL.instantiate!(H.new({"one"=>1, "two"=>2}), 'Object', 'Object', check: true))
-    assert (RDL.instantiate!(H.new(one: 1, two: 2), 'Object', 'Object', check: true))
-    assert (RDL.instantiate!(H.new({"one"=>:one, "two"=>:two}), 'Object', 'Object', check: true))
+    assert (QDL.instantiate!(H.new({}), 'Object', 'Object', check: true))
+    assert (QDL.instantiate!(H.new({"one"=>1, "two"=>2}), 'Object', 'Object', check: true))
+    assert (QDL.instantiate!(H.new(one: 1, two: 2), 'Object', 'Object', check: true))
+    assert (QDL.instantiate!(H.new({"one"=>:one, "two"=>:two}), 'Object', 'Object', check: true))
 
     # A<A<String>>
-    assert (RDL.instantiate!(A.new([RDL.instantiate!(A.new(["a", "b"]), 'String', check: true),
-                                    RDL.instantiate!(A.new(["c"]), 'String', check: true)]), 'TestGeneric::A<String>', check: true))
-    assert_raises(RDL::Type::TypeError) {
+    assert (QDL.instantiate!(A.new([QDL.instantiate!(A.new(["a", "b"]), 'String', check: true),
+                                    QDL.instantiate!(A.new(["c"]), 'String', check: true)]), 'TestGeneric::A<String>', check: true))
+    assert_raises(QDL::Type::TypeError) {
       # Must instantiate all members
-      RDL.instantiate!(A.new([RDL.instantiate!(A.new(["a", "b"]), 'String', check: true), A.new([])]), 'TestGeneric::A<String>', check: true)
+      QDL.instantiate!(A.new([QDL.instantiate!(A.new(["a", "b"]), 'String', check: true), A.new([])]), 'TestGeneric::A<String>', check: true)
     }
-    assert_raises(RDL::Type::TypeError) {
+    assert_raises(QDL::Type::TypeError) {
       # All members must be of same type
-      RDL.instantiate!(A.new([RDL.instantiate!(A.new(["a", "b"]), 'String', check: true), "A"]), 'TestGeneric::A<String>', check: true)
+      QDL.instantiate!(A.new([QDL.instantiate!(A.new(["a", "b"]), 'String', check: true), "A"]), 'TestGeneric::A<String>', check: true)
     }
-    assert_raises(RDL::Type::TypeError) {
+    assert_raises(QDL::Type::TypeError) {
       # All members must be instantiated and of same type
-      RDL.instantiate!(A.new([RDL.instantiate!(A.new(["a", "b"]), 'String', check: true),
-                              RDL.instantiate!(H.new({a: 1, b: 2}), 'Object', 'Object', check: true)]), 'TestGeneric::A<String>', check: true)
+      QDL.instantiate!(A.new([QDL.instantiate!(A.new(["a", "b"]), 'String', check: true),
+                              QDL.instantiate!(H.new({a: 1, b: 2}), 'Object', 'Object', check: true)]), 'TestGeneric::A<String>', check: true)
     }
   end
 

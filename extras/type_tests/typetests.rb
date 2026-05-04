@@ -1,5 +1,5 @@
 require 'bigdecimal'
-require 'rdl'
+require 'qdl'
 require 'types/core'
 
 ## This file contains tests for the Numeric method types specified in lib/types/core-ruby-2.x/.
@@ -821,7 +821,7 @@ class TypeTest
 
 
   def self.query(q,x,y)
-    RDL.contract_switch.off {
+    QDL.contract_switch.off {
       if q =~ /^(\w+(#|\.))?(\w+(!|\?|=)?|!|~|\+|\*\*|-|\*|\/|%|<<|>>|&|\||\^|<|<=|=>|>|==|===|!=|=~|!~|<=>|\[\]|\[\]=)$/
         klass = nil
         klass_pref = nil
@@ -832,15 +832,15 @@ class TypeTest
           meth = $2.to_sym
         elsif q =~ /(.+)\.(.+)/
           klass_pref = "#{$1}."
-          klass = RDL::Util.add_singleton_marker($1)
+          klass = QDL::Util.add_singleton_marker($1)
           meth = $2.to_sym
         else
           klass = self.class.to_s
           klass_pref = "#{klass}#"
           meth = q.to_sym
         end
-        if RDL.info.has?(klass, meth, :type)
-          typs = RDL.info.get(klass, meth, :type)
+        if QDL.info.has?(klass, meth, :type)
+          typs = QDL.info.get(klass, meth, :type)
           typs.each { |t|
             return [t, x.get_binding] if y.nil?
             res, args, blk, bind = t.pre_cond?(blk, x, true, x.get_binding, y)

@@ -1,35 +1,35 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 
 class TestTypes < Minitest::Test
-  include RDL::Type
+  include QDL::Type
 
   class A; end
   class B; end
   class C; end
 
   def setup
-    RDL.reset
+    QDL.reset
   end
 
   def test_nil_top
     tnil = NominalType.new :NilClass
-    assert_equal RDL::Globals.types[:nil], tnil
+    assert_equal QDL::Globals.types[:nil], tnil
     tnil2 = SingletonType.new nil
-    assert_equal RDL::Globals.types[:nil], tnil2
+    assert_equal QDL::Globals.types[:nil], tnil2
     ttop = TopType.new
     ttop2 = TopType.new
     assert_equal ttop, ttop2
-    assert (RDL::Globals.types[:nil] != ttop)
+    assert (QDL::Globals.types[:nil] != ttop)
   end
 
   def test_dyn
     tdyn = DynamicType.new
     tdyn2 = DynamicType.new
     assert_equal tdyn, tdyn2
-    assert_equal RDL::Globals.types[:dyn], tdyn
-    assert (RDL::Globals.types[:nil] != tdyn)
+    assert_equal QDL::Globals.types[:dyn], tdyn
+    assert (QDL::Globals.types[:nil] != tdyn)
   end
 
   def test_nominal
@@ -75,31 +75,31 @@ class TestTypes < Minitest::Test
     assert_equal 2, t1.types.length
     t2 = c.new tb, ta
     assert_equal t1, t2
-    t3 = c.new RDL::Globals.types[:top], RDL::Globals.types[:top]
-    assert_equal RDL::Globals.types[:top], t3
-    t4 = c.new RDL::Globals.types[:nil], RDL::Globals.types[:nil]
-    assert_equal RDL::Globals.types[:nil], t4
+    t3 = c.new QDL::Globals.types[:top], QDL::Globals.types[:top]
+    assert_equal QDL::Globals.types[:top], t3
+    t4 = c.new QDL::Globals.types[:nil], QDL::Globals.types[:nil]
+    assert_equal QDL::Globals.types[:nil], t4
     t5 = c.new ta, tb, tc
     assert_equal 3, t5.types.length
     t6 = c.new ta, (c.new tb, tc)
     assert_equal t5, t6
     t7 = c.new (c.new tc, tb), (c.new ta)
     assert_equal t5, t7
-    assert (t1 != RDL::Globals.types[:nil])
+    assert (t1 != QDL::Globals.types[:nil])
   end
 
   def test_union_intersection
     u_or_i UnionType
     u_or_i IntersectionType
-    t = UnionType.new RDL::Globals.types[:top], RDL::Globals.types[:nil], RDL::Globals.types[:top], RDL::Globals.types[:nil]
-    assert_equal RDL::Globals.types[:top], t
+    t = UnionType.new QDL::Globals.types[:top], QDL::Globals.types[:nil], QDL::Globals.types[:top], QDL::Globals.types[:nil]
+    assert_equal QDL::Globals.types[:top], t
   end
 
   def test_optional
     ta = NominalType.new :A
-    t1 = OptionalType.new RDL::Globals.types[:nil]
-    assert_equal RDL::Globals.types[:nil], t1.type
-    t2 = OptionalType.new RDL::Globals.types[:nil]
+    t1 = OptionalType.new QDL::Globals.types[:nil]
+    assert_equal QDL::Globals.types[:nil], t1.type
+    t2 = OptionalType.new QDL::Globals.types[:nil]
     assert_equal t1, t2
     t3 = OptionalType.new ta
     assert (t1 != t3)
@@ -107,9 +107,9 @@ class TestTypes < Minitest::Test
 
   def test_vararg
     ta = NominalType.new :A
-    t1 = VarargType.new RDL::Globals.types[:nil]
-    assert_equal RDL::Globals.types[:nil], t1.type
-    t2 = VarargType.new RDL::Globals.types[:nil]
+    t1 = VarargType.new QDL::Globals.types[:nil]
+    assert_equal QDL::Globals.types[:nil], t1.type
+    t2 = VarargType.new QDL::Globals.types[:nil]
     assert_equal t1, t2
     t3 = VarargType.new ta
     assert (t1 != t3)
@@ -119,11 +119,11 @@ class TestTypes < Minitest::Test
     ta = NominalType.new :A
     tb = NominalType.new :B
     tc = NominalType.new :C
-    t1 = MethodType.new [ta, tb, tc], nil, RDL::Globals.types[:nil]
+    t1 = MethodType.new [ta, tb, tc], nil, QDL::Globals.types[:nil]
     assert_equal [ta, tb, tc], t1.args
     assert_nil t1.block
-    assert_equal RDL::Globals.types[:nil], t1.ret
-    t2 = MethodType.new [RDL::Globals.types[:nil]], t1, RDL::Globals.types[:nil]
+    assert_equal QDL::Globals.types[:nil], t1.ret
+    t2 = MethodType.new [QDL::Globals.types[:nil]], t1, QDL::Globals.types[:nil]
     assert_equal t1, t2.block
   end
 
@@ -148,7 +148,7 @@ class TestTypes < Minitest::Test
     ta = NominalType.new :A
     tb = NominalType.new :B
     tc = NominalType.new :C
-    tm1 = MethodType.new [ta, tb, tc], nil, RDL::Globals.types[:nil]
+    tm1 = MethodType.new [ta, tb, tc], nil, QDL::Globals.types[:nil]
     tm2 = MethodType.new [ta], tm1, tb
     t1 = StructuralType.new(m1: tm1, m2: tm2)
     assert_equal tm1, t1.methods[:m1]
@@ -199,15 +199,15 @@ class TestTypes < Minitest::Test
     tmethAAB = MethodType.new([tA, tA], nil, tB)
     tmethaab = MethodType.new([ta, ta], nil, tb)
     tmethstringstringfixnum = MethodType.new([tstring, tstring], nil, tinteger)
-    tmethbAABn = MethodType.new([], tmethAAB, RDL::Globals.types[:nil])
-    tmethbaabn = MethodType.new([], tmethaab, RDL::Globals.types[:nil])
-    tmethbssfn = MethodType.new([], tmethstringstringfixnum, RDL::Globals.types[:nil])
+    tmethbAABn = MethodType.new([], tmethAAB, QDL::Globals.types[:nil])
+    tmethbaabn = MethodType.new([], tmethaab, QDL::Globals.types[:nil])
+    tmethbssfn = MethodType.new([], tmethstringstringfixnum, QDL::Globals.types[:nil])
     tstructorig = StructuralType.new(m1: tmethAAB, m2: tmethaab,
                                      m3: tmethbAABn, m4: tmethbaabn)
     tstructinst = StructuralType.new(m1: tmethAAB, m2: tmethstringstringfixnum,
                                      m3: tmethbAABn, m4: tmethbssfn)
-    assert_equal RDL::Globals.types[:nil], RDL::Globals.types[:nil].instantiate(inst)
-    assert_equal RDL::Globals.types[:top], RDL::Globals.types[:top].instantiate(inst)
+    assert_equal QDL::Globals.types[:nil], QDL::Globals.types[:nil].instantiate(inst)
+    assert_equal QDL::Globals.types[:top], QDL::Globals.types[:top].instantiate(inst)
     assert_equal tA, tA.instantiate(inst)
     assert_equal toptionalA, toptionalA.instantiate(inst)
     assert_equal tvarargA, tvarargA.instantiate(inst)
@@ -234,7 +234,7 @@ class TestTypes < Minitest::Test
   end
 
   def test_canonical
-    t = RDL::Globals.parser.scan_str '#T Array<Integer or Integer>'
+    t = QDL::Globals.parser.scan_str '#T Array<Integer or Integer>'
     assert_equal 'Array<Integer>', t.canonical.to_s
   end
 end

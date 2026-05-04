@@ -1,3 +1,3 @@
-RDL.type :Time, 'self.zone', '() -> ActiveSupport::TimeZone'
-RDL.type :Time, :+, '(ActiveSupport::Duration) -> Time'
-RDL.type :Time, :-, '(ActiveSupport::Duration) -> Time'
+QDL.type :Time, 'self.zone', '() -> ActiveSupport::TimeZone'
+QDL.type :Time, :+, '(ActiveSupport::Duration) -> Time'
+QDL.type :Time, :-, '(ActiveSupport::Duration) -> Time'

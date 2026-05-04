@@ -1,4 +1,4 @@
-RDL.nowrap :Date
+QDL.nowrap :Date
 
-RDL.type :Date, 'self.now', '() -> DateTime'
-RDL.type :Date, :strftime, '(String) -> String'
+QDL.type :Date, 'self.now', '() -> DateTime'
+QDL.type :Date, :strftime, '(String) -> String'

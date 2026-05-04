@@ -1,3 +1,3 @@
-RDL.nowrap :CSV
+QDL.nowrap :CSV
 
-RDL.type :CSV, 'self.foreach', '(String or File, ?Hash<Symbol, u>) {(Array<String>) -> %any} -> NilClass'
+QDL.type :CSV, 'self.foreach', '(String or File, ?Hash<Symbol, u>) {(Array<String>) -> %any} -> NilClass'

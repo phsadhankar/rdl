@@ -1,11 +1,11 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 
 class TestDsl < Minitest::Test
 
   def setup
-    RDL.reset
+    QDL.reset
   end
 
 

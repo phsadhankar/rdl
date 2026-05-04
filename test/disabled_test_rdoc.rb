@@ -8,12 +8,12 @@ require 'tempfile'
 require 'tmpdir'
 
 require 'rdoc'
-require_relative '../lib/rdl.rb'
+require_relative '../lib/qdl.rb'
 
 class RdocTest < MiniTest::Test
 
   class TestClass
-    extend RDL
+    extend QDL
 
     typesig :size, "()->Integer"
     typesig :bytesize, "()->Integer"
@@ -25,7 +25,7 @@ class RdocTest < MiniTest::Test
   end
 end
 
-class TestRDLRDoc
+class TestQDLRDoc
 =begin
     @have_encoding = Object.const_defined? :Encoding
     @RM = RDoc::Markup
@@ -68,7 +68,7 @@ class TestRDLRDoc
 
     @top_level = @store.add_file 'file.rb'
     @top_level.parser = RDoc::Parser::Ruby
-    klass = @top_level.add_class RDoc::NormalClass, 'RDL_TEST_Klass(String)'
+    klass = @top_level.add_class RDoc::NormalClass, 'QDL_TEST_Klass(String)'
 
     alis_constant = RDoc::Constant.new 'ABC', nil, ''
     alis_constant.record_location @top_level

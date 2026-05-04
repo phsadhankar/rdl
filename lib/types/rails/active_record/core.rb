@@ -1,2 +1,2 @@
-RDL.nowrap :'ActiveRecord::Core'
-RDL.type :'ActiveRecord::Core', :==, '(%any) -> %bool'
+QDL.nowrap :'ActiveRecord::Core'
+QDL.type :'ActiveRecord::Core', :==, '(%any) -> %bool'

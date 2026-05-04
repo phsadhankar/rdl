@@ -5,41 +5,41 @@ require 'coderay'
 
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + '/../lib'
-require 'rdl'
+require 'qdl'
 require 'types/core'
 
 # Testing Inference (constraint.rb)
 class TestInfer < Minitest::Test
-  extend RDL::Annotate
+  extend QDL::Annotate
 
   def setup
-    RDL.reset
-    RDL::Config.instance.number_mode = true
+    QDL.reset
+    QDL::Config.instance.number_mode = true
 
     # TODO: this will go away after config/reset
-    RDL::Config.instance.use_precise_string = false
-    RDL::Config.instance.log_levels[:inference] = :error
-    # RDL::Config.instance.log_levels[:inference] = :debug
+    QDL::Config.instance.use_precise_string = false
+    QDL::Config.instance.log_levels[:inference] = :error
+    # QDL::Config.instance.log_levels[:inference] = :debug
 
-    RDL.readd_comp_types
-    RDL.type_params :Hash, [:k, :v], :all? unless RDL::Globals.type_params['Hash']
-    RDL.type_params :Array, [:t], :all? unless RDL::Globals.type_params['Array']
-    # RDL.rdl_alias :Array, :size, :length
-    RDL.nowrap :Range
-    RDL.type_params 'RDL::Type::SingletonType', [:t], :satisfies? unless RDL::Globals.type_params['RDL::Type::SingletonType']
-    RDL.type_params(:Range, [:t], nil, variance: [:+]) { |t| t.member?(self.begin) && t.member?(self.end) } unless RDL::Globals.type_params['Range']
-    RDL.type :Range, :each, '() { (t) -> %any } -> self'
-    RDL.type :Range, :each, '() -> Enumerator<t>'
-    RDL.type :Integer, :to_s, '() -> String', wrap: false
-    RDL.type :Kernel, 'self.puts', '(*[to_s : () -> String]) -> nil', wrap: false
-    RDL.type :Kernel, :raise, '() -> %bot', wrap: false
-    RDL.type :Kernel, :raise, '(String) -> %bot', wrap: false
-    RDL.type :Kernel, :raise, '(Class, ?String, ?Array<String>) -> %bot', wrap: false
-    RDL.type :Kernel, :raise, '(Exception, ?String, ?Array<String>) -> %bot', wrap: false
-    RDL.type :Object, :===, '(%any other) -> %bool', wrap: false
-    RDL.type :Object, :clone, '() -> self', wrap: false
-    RDL.type :NilClass, :&, '(%any obj) -> false', wrap: false
-    RDL.type :Hash, :merge, '(Hash<a, b>) -> Hash<k or a, b or v>', wrap: false
+    QDL.readd_comp_types
+    QDL.type_params :Hash, [:k, :v], :all? unless QDL::Globals.type_params['Hash']
+    QDL.type_params :Array, [:t], :all? unless QDL::Globals.type_params['Array']
+    # QDL.qdl_alias :Array, :size, :length
+    QDL.nowrap :Range
+    QDL.type_params 'QDL::Type::SingletonType', [:t], :satisfies? unless QDL::Globals.type_params['QDL::Type::SingletonType']
+    QDL.type_params(:Range, [:t], nil, variance: [:+]) { |t| t.member?(self.begin) && t.member?(self.end) } unless QDL::Globals.type_params['Range']
+    QDL.type :Range, :each, '() { (t) -> %any } -> self'
+    QDL.type :Range, :each, '() -> Enumerator<t>'
+    QDL.type :Integer, :to_s, '() -> String', wrap: false
+    QDL.type :Kernel, 'self.puts', '(*[to_s : () -> String]) -> nil', wrap: false
+    QDL.type :Kernel, :raise, '() -> %bot', wrap: false
+    QDL.type :Kernel, :raise, '(String) -> %bot', wrap: false
+    QDL.type :Kernel, :raise, '(Class, ?String, ?Array<String>) -> %bot', wrap: false
+    QDL.type :Kernel, :raise, '(Exception, ?String, ?Array<String>) -> %bot', wrap: false
+    QDL.type :Object, :===, '(%any other) -> %bool', wrap: false
+    QDL.type :Object, :clone, '() -> self', wrap: false
+    QDL.type :NilClass, :&, '(%any obj) -> false', wrap: false
+    QDL.type :Hash, :merge, '(Hash<a, b>) -> Hash<k or a, b or v>', wrap: false
 
     ### Uncomment below to see test names. Useful for hanging tests.
     # puts "Start #{@NAME}"
@@ -47,22 +47,22 @@ class TestInfer < Minitest::Test
 
   # TODO: this will go away after config/reset
   def teardown
-    RDL::Config.instance.number_mode = false
-    RDL::Config.instance.use_unknown_types = false # set in do_infer
+    QDL::Config.instance.number_mode = false
+    QDL::Config.instance.use_unknown_types = false # set in do_infer
   end
 
   # convert a string to a method type
   def tm(typ)
-    RDL::Globals.parser.scan_str('#Q ' + typ)
+    QDL::Globals.parser.scan_str('#Q ' + typ)
   end
 
   def infer_method_type(method, depends_on: [])
-    depends_on.each { |m| RDL.infer self.class, m, time: :test }
+    depends_on.each { |m| QDL.infer self.class, m, time: :test }
 
-    RDL.infer self.class, method, time: :test
-    RDL.do_infer :test, render_report: false
+    QDL.infer self.class, method, time: :test
+    QDL.do_infer :test, render_report: false
 
-    types = RDL::Globals.info.get 'TestInfer', method, :type
+    types = QDL::Globals.info.get 'TestInfer', method, :type
     assert types.length == 1, msg: 'Expected one solution for type'
 
     types[0]
@@ -70,10 +70,10 @@ class TestInfer < Minitest::Test
 
   def assert_type_equal(meth, expected_type, depends_on: [])
     typ = infer_method_type meth, depends_on: depends_on
-    RDL::Type::VarType.no_print_XXX!
+    QDL::Type::VarType.no_print_XXX!
 
     if expected_type != typ.solution
-      ast  = RDL::Typecheck.get_ast(self.class, meth)
+      ast  = QDL::Typecheck.get_ast(self.class, meth)
       code = CodeRay.scan(ast.loc.expression.source, :ruby).term
 
       error_str  = 'Given'.yellow + ":\n  #{code}\n\n"

@@ -1,3 +1,3 @@
-RDL.nowrap :Abbrev
+QDL.nowrap :Abbrev
 
-RDL.type :Abbrev, 'self.abbrev', '(Array<String>) -> Hash<String,String>'
+QDL.type :Abbrev, 'self.abbrev', '(Array<String>) -> Hash<String,String>'

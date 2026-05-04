@@ -1,19 +1,19 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 require 'types/core'
 
 
 class TestBoundTypes < Minitest::Test
-  extend RDL::Annotate
+  extend QDL::Annotate
 
   def test_bound_types
     self.class.class_eval {
-      type :uses_bound, "(t<::Integer) -> ``if t.is_a?(RDL::Type::SingletonType) then RDL::Globals.types[:integer] else RDL::Globals.types[:string] end``"
+      type :uses_bound, "(t<::Integer) -> ``if t.is_a?(QDL::Type::SingletonType) then QDL::Globals.types[:integer] else QDL::Globals.types[:string] end``"
 
-      type :uses_bound_twice, "(t<::Integer, p<::Integer) -> ``if t==p then RDL::Globals.types[:integer] else RDL::Globals.types[:string] end``"
+      type :uses_bound_twice, "(t<::Integer, p<::Integer) -> ``if t==p then QDL::Globals.types[:integer] else QDL::Globals.types[:string] end``"
 
-      type :uses_optional, "(?String, t<::Integer) -> ``if t.is_a?(RDL::Type::SingletonType) then RDL::Globals.types[:integer] else RDL::Globals.types[:string] end``"
+      type :uses_optional, "(?String, t<::Integer) -> ``if t.is_a?(QDL::Type::SingletonType) then QDL::Globals.types[:integer] else QDL::Globals.types[:string] end``"
 
       type "(Integer) -> String", typecheck: :now
       def calls_bound1(x)
@@ -70,11 +70,11 @@ class TestBoundTypes < Minitest::Test
         uses_optional(x)
       end
     }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :fail1 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :fail2 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :fail3 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :fail4 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :fail5 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :fail1 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :fail2 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :fail3 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :fail4 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :fail5 }
   end
   
 end

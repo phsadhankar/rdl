@@ -1,3 +1,3 @@
-RDL.nowrap :'ActiveSupport::Logger'
-RDL.type :'ActiveSupport::Logger', :error, '(String) -> %bool'
-RDL.type :'ActiveSupport::Logger', :debug, '(String) -> %bool'
+QDL.nowrap :'ActiveSupport::Logger'
+QDL.type :'ActiveSupport::Logger', :error, '(String) -> %bool'
+QDL.type :'ActiveSupport::Logger', :debug, '(String) -> %bool'

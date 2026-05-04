@@ -19,7 +19,7 @@ task :skel, [:cname,:prettyname] do |skel, varhash|
 end
 
 task :stat, [:fname,:outpath] do |stat,varhash|
-  ruby "extras/rdlstat.rb #{varhash[:fname]} #{varhash[:outpath]}"
+  ruby "extras/qdlstat.rb #{varhash[:fname]} #{varhash[:outpath]}"
 end
 
 task :statrun, [:fname] do |statrun,varhash|

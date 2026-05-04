@@ -1,3 +1,3 @@
-RDL.type :String, :truncate, '(Integer) -> String'
-RDL.type :String, :strftime, '(String) -> String'
-RDL.type :String, :sanitize, '() -> String'
+QDL.type :String, :truncate, '(Integer) -> String'
+QDL.type :String, :strftime, '(String) -> String'
+QDL.type :String, :sanitize, '() -> String'

@@ -1,9 +1,9 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 
 class TestLe < Minitest::Test
-  include RDL::Type
+  include QDL::Type
 
   class A
   end
@@ -16,11 +16,11 @@ class TestLe < Minitest::Test
 
   # convert arg string to a type
   def tt(t)
-    RDL::Globals.parser.scan_str('#T ' + t)
+    QDL::Globals.parser.scan_str('#T ' + t)
   end
 
   def setup
-    RDL.reset
+    QDL.reset
     @tbasicobject = NominalType.new "BasicObject"
     @tsymfoo = SingletonType.new :foo
     @ta = NominalType.new A
@@ -29,67 +29,67 @@ class TestLe < Minitest::Test
   end
 
   def test_nil
-    assert (RDL::Globals.types[:nil] <= RDL::Globals.types[:top])
-    assert (RDL::Globals.types[:nil] <= RDL::Globals.types[:string])
-    assert (RDL::Globals.types[:nil] <= RDL::Globals.types[:object])
-    assert (RDL::Globals.types[:nil] <= @tbasicobject)
-    assert (not (RDL::Globals.types[:nil] <= @tsymfoo)) # nil no longer <= other singleton types
-    assert (not (RDL::Globals.types[:top] <= RDL::Globals.types[:nil]))
-    assert (not (RDL::Globals.types[:string] <= RDL::Globals.types[:nil]))
-    assert (not (RDL::Globals.types[:object] <= RDL::Globals.types[:nil]))
-    assert (not (@tbasicobject <= RDL::Globals.types[:nil]))
-    assert (not (@tsymfoo <= RDL::Globals.types[:nil]))
+    assert (QDL::Globals.types[:nil] <= QDL::Globals.types[:top])
+    assert (QDL::Globals.types[:nil] <= QDL::Globals.types[:string])
+    assert (QDL::Globals.types[:nil] <= QDL::Globals.types[:object])
+    assert (QDL::Globals.types[:nil] <= @tbasicobject)
+    assert (not (QDL::Globals.types[:nil] <= @tsymfoo)) # nil no longer <= other singleton types
+    assert (not (QDL::Globals.types[:top] <= QDL::Globals.types[:nil]))
+    assert (not (QDL::Globals.types[:string] <= QDL::Globals.types[:nil]))
+    assert (not (QDL::Globals.types[:object] <= QDL::Globals.types[:nil]))
+    assert (not (@tbasicobject <= QDL::Globals.types[:nil]))
+    assert (not (@tsymfoo <= QDL::Globals.types[:nil]))
   end
 
   def test_top
-    assert (not (RDL::Globals.types[:top] <= RDL::Globals.types[:nil]))
-    assert (not (RDL::Globals.types[:top] <= RDL::Globals.types[:string]))
-    assert (not (RDL::Globals.types[:top] <= RDL::Globals.types[:object]))
-    assert (not (RDL::Globals.types[:top] <= @tbasicobject))
-    assert (not (RDL::Globals.types[:top] <= @tsymfoo))
-    assert (RDL::Globals.types[:top] <= RDL::Globals.types[:top])
-    assert (RDL::Globals.types[:string] <= RDL::Globals.types[:top])
-    assert (RDL::Globals.types[:object] <= RDL::Globals.types[:top])
-    assert (@tbasicobject <= RDL::Globals.types[:top])
-    assert (@tsymfoo <= RDL::Globals.types[:top])
+    assert (not (QDL::Globals.types[:top] <= QDL::Globals.types[:nil]))
+    assert (not (QDL::Globals.types[:top] <= QDL::Globals.types[:string]))
+    assert (not (QDL::Globals.types[:top] <= QDL::Globals.types[:object]))
+    assert (not (QDL::Globals.types[:top] <= @tbasicobject))
+    assert (not (QDL::Globals.types[:top] <= @tsymfoo))
+    assert (QDL::Globals.types[:top] <= QDL::Globals.types[:top])
+    assert (QDL::Globals.types[:string] <= QDL::Globals.types[:top])
+    assert (QDL::Globals.types[:object] <= QDL::Globals.types[:top])
+    assert (@tbasicobject <= QDL::Globals.types[:top])
+    assert (@tsymfoo <= QDL::Globals.types[:top])
   end
 
   def test_dyn
-    assert (RDL::Globals.types[:dyn] <= RDL::Globals.types[:nil])
-    assert (RDL::Globals.types[:nil] <= RDL::Globals.types[:dyn])
-    assert (RDL::Globals.types[:dyn] <= RDL::Globals.types[:top])
-    assert (RDL::Globals.types[:top] <= RDL::Globals.types[:dyn])
-    assert (RDL::Globals.types[:dyn] <= RDL::Globals.types[:bot])
-    assert (RDL::Globals.types[:bot] <= RDL::Globals.types[:dyn])
-    assert (RDL::Globals.types[:dyn] <= RDL::Globals.types[:dyn])
-    assert (RDL::Globals.types[:dyn] <= RDL::Globals.types[:string])
-    assert (RDL::Globals.types[:string] <= RDL::Globals.types[:dyn])
-    assert (RDL::Globals.types[:dyn] <= RDL::Globals.types[:object])
-    assert (RDL::Globals.types[:object] <= RDL::Globals.types[:dyn])
-    assert (RDL::Globals.types[:dyn] <= @tbasicobject)
-    assert (@tbasicobject <= RDL::Globals.types[:dyn])
-    assert (RDL::Globals.types[:dyn] <= @tsymfoo)
-    assert (@tsymfoo <= RDL::Globals.types[:dyn])
+    assert (QDL::Globals.types[:dyn] <= QDL::Globals.types[:nil])
+    assert (QDL::Globals.types[:nil] <= QDL::Globals.types[:dyn])
+    assert (QDL::Globals.types[:dyn] <= QDL::Globals.types[:top])
+    assert (QDL::Globals.types[:top] <= QDL::Globals.types[:dyn])
+    assert (QDL::Globals.types[:dyn] <= QDL::Globals.types[:bot])
+    assert (QDL::Globals.types[:bot] <= QDL::Globals.types[:dyn])
+    assert (QDL::Globals.types[:dyn] <= QDL::Globals.types[:dyn])
+    assert (QDL::Globals.types[:dyn] <= QDL::Globals.types[:string])
+    assert (QDL::Globals.types[:string] <= QDL::Globals.types[:dyn])
+    assert (QDL::Globals.types[:dyn] <= QDL::Globals.types[:object])
+    assert (QDL::Globals.types[:object] <= QDL::Globals.types[:dyn])
+    assert (QDL::Globals.types[:dyn] <= @tbasicobject)
+    assert (@tbasicobject <= QDL::Globals.types[:dyn])
+    assert (QDL::Globals.types[:dyn] <= @tsymfoo)
+    assert (@tsymfoo <= QDL::Globals.types[:dyn])
   end
 
   def test_sym
-    assert (RDL::Globals.types[:symbol] <= RDL::Globals.types[:symbol])
+    assert (QDL::Globals.types[:symbol] <= QDL::Globals.types[:symbol])
     assert (@tsymfoo <= @tsymfoo)
-    assert (@tsymfoo <= RDL::Globals.types[:symbol])
-    assert (not (RDL::Globals.types[:symbol] <= @tsymfoo))
+    assert (@tsymfoo <= QDL::Globals.types[:symbol])
+    assert (not (QDL::Globals.types[:symbol] <= @tsymfoo))
   end
 
   def test_nominal
-    assert (RDL::Globals.types[:string] <= RDL::Globals.types[:string])
-    assert (RDL::Globals.types[:symbol] <= RDL::Globals.types[:symbol])
-    assert (not (RDL::Globals.types[:string] <= RDL::Globals.types[:symbol]))
-    assert (not (RDL::Globals.types[:symbol] <= RDL::Globals.types[:string]))
-    assert (RDL::Globals.types[:string] <= RDL::Globals.types[:object])
-    assert (RDL::Globals.types[:string] <= @tbasicobject)
-    assert (RDL::Globals.types[:object] <= @tbasicobject)
-    assert (not (RDL::Globals.types[:object] <= RDL::Globals.types[:string]))
-    assert (not (@tbasicobject <= RDL::Globals.types[:string]))
-    assert (not (@tbasicobject <= RDL::Globals.types[:object]))
+    assert (QDL::Globals.types[:string] <= QDL::Globals.types[:string])
+    assert (QDL::Globals.types[:symbol] <= QDL::Globals.types[:symbol])
+    assert (not (QDL::Globals.types[:string] <= QDL::Globals.types[:symbol]))
+    assert (not (QDL::Globals.types[:symbol] <= QDL::Globals.types[:string]))
+    assert (QDL::Globals.types[:string] <= QDL::Globals.types[:object])
+    assert (QDL::Globals.types[:string] <= @tbasicobject)
+    assert (QDL::Globals.types[:object] <= @tbasicobject)
+    assert (not (QDL::Globals.types[:object] <= QDL::Globals.types[:string]))
+    assert (not (@tbasicobject <= QDL::Globals.types[:string]))
+    assert (not (@tbasicobject <= QDL::Globals.types[:object]))
     assert (@ta <= @ta)
     assert (@tb <= @ta)
     assert (@tc <= @ta)
@@ -102,16 +102,16 @@ class TestLe < Minitest::Test
   end
 
   def test_union
-    tstring_or_sym = UnionType.new(RDL::Globals.types[:string], RDL::Globals.types[:symbol])
-    assert (tstring_or_sym <= RDL::Globals.types[:object])
-    assert (not (RDL::Globals.types[:object] <= tstring_or_sym))
+    tstring_or_sym = UnionType.new(QDL::Globals.types[:string], QDL::Globals.types[:symbol])
+    assert (tstring_or_sym <= QDL::Globals.types[:object])
+    assert (not (QDL::Globals.types[:object] <= tstring_or_sym))
   end
 
   def test_tuple
-    RDL.type_params :Array, [:t], :all?
+    QDL.type_params :Array, [:t], :all?
 
-    t1 = TupleType.new(RDL::Globals.types[:symbol], RDL::Globals.types[:string])
-    t2 = TupleType.new(RDL::Globals.types[:object], RDL::Globals.types[:object])
+    t1 = TupleType.new(QDL::Globals.types[:symbol], QDL::Globals.types[:string])
+    t2 = TupleType.new(QDL::Globals.types[:object], QDL::Globals.types[:object])
     tarray = NominalType.new("Array")
     assert (t1 <= t1)
     assert (t2 <= t2)
@@ -151,7 +151,7 @@ class TestLe < Minitest::Test
   end
 
   def test_finite_hash
-    RDL.type_params :Hash, [:k, :v], :all?
+    QDL.type_params :Hash, [:k, :v], :all?
 
     t12 = tt "{a: 1, b: 2}"
     tfs = tt "{a: Integer, b: Integer}"
@@ -216,8 +216,8 @@ class TestLe < Minitest::Test
   end
 
   def test_generic
-    RDL.type_params :Array, [:t], :all?
-    RDL.type_params :Enumerable, [:t], :all?
+    QDL.type_params :Array, [:t], :all?
+    QDL.type_params :Enumerable, [:t], :all?
 
     assert (tt("Array<Integer>") <= tt("Array<Integer>"))
     assert (not (tt("Array<Integer>") <= tt("Array<Object>")))
@@ -225,10 +225,10 @@ class TestLe < Minitest::Test
   end
 
   def test_method
-    tss = MethodType.new([RDL::Globals.types[:string]], nil, RDL::Globals.types[:string])
-    tso = MethodType.new([RDL::Globals.types[:string]], nil, RDL::Globals.types[:object])
-    tos = MethodType.new([RDL::Globals.types[:object]], nil, RDL::Globals.types[:string])
-    too = MethodType.new([RDL::Globals.types[:object]], nil, RDL::Globals.types[:object])
+    tss = MethodType.new([QDL::Globals.types[:string]], nil, QDL::Globals.types[:string])
+    tso = MethodType.new([QDL::Globals.types[:string]], nil, QDL::Globals.types[:object])
+    tos = MethodType.new([QDL::Globals.types[:object]], nil, QDL::Globals.types[:string])
+    too = MethodType.new([QDL::Globals.types[:object]], nil, QDL::Globals.types[:object])
     assert (tss <= tss)
     assert (tss <= tso)
     assert (not (tss <= tos))
@@ -245,21 +245,21 @@ class TestLe < Minitest::Test
     assert (too <= tso)
     assert (not (too <= tos))
     assert (too <= too)
-    tbos = MethodType.new([], tos, RDL::Globals.types[:object])
-    tbso = MethodType.new([], tso, RDL::Globals.types[:object])
+    tbos = MethodType.new([], tos, QDL::Globals.types[:object])
+    tbso = MethodType.new([], tso, QDL::Globals.types[:object])
     assert (tbos <= tbos)
     assert (not (tbos <= tbso))
     assert (tbso <= tbso)
     assert (tbso <= tbos)
-    assert (tss <= RDL::Globals.types[:proc])
+    assert (tss <= QDL::Globals.types[:proc])
   end
 
   def test_structural
-    tso = MethodType.new([RDL::Globals.types[:string]], nil, RDL::Globals.types[:object])
-    tos = MethodType.new([RDL::Globals.types[:object]], nil, RDL::Globals.types[:string])
+    tso = MethodType.new([QDL::Globals.types[:string]], nil, QDL::Globals.types[:object])
+    tos = MethodType.new([QDL::Globals.types[:object]], nil, QDL::Globals.types[:string])
     ts1 = StructuralType.new(m1: tso)
     ts2 = StructuralType.new(m1: tos)
-    assert (ts1 <= RDL::Globals.types[:top])
+    assert (ts1 <= QDL::Globals.types[:top])
     assert (ts1 <= ts1)
     assert (ts2 <= ts2)
     assert (ts2 <= ts1)
@@ -288,13 +288,13 @@ class TestLe < Minitest::Test
   end
 
   def test_nominal_structural
-    RDL.type TestLe::NomT, :m1, "() -> nil", wrap: false
-    RDL.type TestLe::NomT, :m2, "() -> nil", wrap: false
+    QDL.type TestLe::NomT, :m1, "() -> nil", wrap: false
+    QDL.type TestLe::NomT, :m2, "() -> nil", wrap: false
 
     tnom = NominalType.new(Nom)
     tnomt = NominalType.new(NomT)
-    tma = MethodType.new([], nil, RDL::Globals.types[:nil])
-    tmb = MethodType.new([RDL::Globals.types[:integer]], nil, RDL::Globals.types[:nil])
+    tma = MethodType.new([], nil, QDL::Globals.types[:nil])
+    tmb = MethodType.new([QDL::Globals.types[:integer]], nil, QDL::Globals.types[:nil])
     ts1 = StructuralType.new(m1: tma)
     assert (tnom <= ts1)
     assert (tnomt <= ts1)
@@ -310,27 +310,27 @@ class TestLe < Minitest::Test
   end
 
   def test_leq_inst
-    RDL.type_params :Array, [:t], :all?
-    RDL.type_params :Hash, [:k, :v], :all?
+    QDL.type_params :Array, [:t], :all?
+    QDL.type_params :Hash, [:k, :v], :all?
     # when return of do_leq is false, ignore resulting inst, since that's very implementation dependent
     assert_equal [true, {t: @ta}], do_leq(tt("t"), @ta, true)
     assert_equal false, do_leq(tt("t"), @ta, false)[0]
     assert_equal false, do_leq(@ta, tt("t"), true)[0]
     assert_equal [true, {t: @ta}], do_leq(@ta, tt("t"), false)
-    assert_equal [true, {}], do_leq(RDL::Globals.types[:bot], tt("t"), true)
-    assert_equal [true, {}], do_leq(RDL::Globals.types[:bot], tt("t"), false)
-    assert_equal false, do_leq(RDL::Globals.types[:top], tt("t"), true)[0]
-    assert_equal [true, {t: RDL::Globals.types[:top]}], do_leq(RDL::Globals.types[:top], tt("t"), false)
+    assert_equal [true, {}], do_leq(QDL::Globals.types[:bot], tt("t"), true)
+    assert_equal [true, {}], do_leq(QDL::Globals.types[:bot], tt("t"), false)
+    assert_equal false, do_leq(QDL::Globals.types[:top], tt("t"), true)[0]
+    assert_equal [true, {t: QDL::Globals.types[:top]}], do_leq(QDL::Globals.types[:top], tt("t"), false)
     assert_equal [true, {t: @ta, u: @ta}], do_leq(tt("t or u"), @ta, true)
     assert_equal false, do_leq(tt("t or u"), @ta, false)[0]
     assert_equal false, do_leq(tt("3"), tt("t"), true)[0]
     assert_equal [true, {t: tt("3")}], do_leq(tt("3"), tt("t"), false)
-    assert_equal [true, {t: RDL::Globals.types[:integer]}], do_leq(tt("Array<t>"), tt("Array<Integer>"), true)
+    assert_equal [true, {t: QDL::Globals.types[:integer]}], do_leq(tt("Array<t>"), tt("Array<Integer>"), true)
     assert_equal false, do_leq(tt("Array<t>"), tt("Array<Integer>"), false)[0]
-    assert_equal [true, {t: RDL::Globals.types[:integer]}], do_leq(tt("Array<Integer>"), tt("Array<t>"), false)
+    assert_equal [true, {t: QDL::Globals.types[:integer]}], do_leq(tt("Array<Integer>"), tt("Array<t>"), false)
     assert_equal false, do_leq(tt("Array<Integer>"), tt("Array<t>"), true)[0]
-    assert_equal [true, {t: RDL::Globals.types[:integer], u: RDL::Globals.types[:string]}], do_leq(tt("Hash<t,u>"), tt("Hash<Integer,String>"), true)
-    assert_equal [true, {t: RDL::Globals.types[:integer]}], do_leq(tt("Hash<t,t>"), tt("Hash<Integer,Integer>"), true)
+    assert_equal [true, {t: QDL::Globals.types[:integer], u: QDL::Globals.types[:string]}], do_leq(tt("Hash<t,u>"), tt("Hash<Integer,String>"), true)
+    assert_equal [true, {t: QDL::Globals.types[:integer]}], do_leq(tt("Hash<t,t>"), tt("Hash<Integer,Integer>"), true)
     assert_equal false, do_leq(tt("Hash<t,t>"), tt("Hash<Integer,String>"), true)[0]
   end
 
@@ -352,9 +352,9 @@ class TestLe < Minitest::Test
 
   # def test_intersection
   #   skip "<= not defined on intersection"
-  #   tobject_and_basicobject = IntersectionType.new(RDL::Globals.types[:object], @tbasicobject)
-  #   assert (not (tobject_and_basicobject <= RDL::Globals.types[:object]))
-  #   assert (RDL::Globals.types[:object] <= tobject_and_basicobject)
+  #   tobject_and_basicobject = IntersectionType.new(QDL::Globals.types[:object], @tbasicobject)
+  #   assert (not (tobject_and_basicobject <= QDL::Globals.types[:object]))
+  #   assert (QDL::Globals.types[:object] <= tobject_and_basicobject)
   # end
 
 end

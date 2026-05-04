@@ -1,13 +1,13 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 
 class TestIntersection < Minitest::Test
-  include RDL::Type
+  include QDL::Type
 
   def setup
-    RDL.reset
-    @parser = RDL::Type::Parser.new
+    QDL.reset
+    @parser = QDL::Type::Parser.new
 
     @integer = NominalType.new(Integer)
     @string = NominalType.new(String)

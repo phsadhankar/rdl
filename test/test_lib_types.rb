@@ -9,7 +9,7 @@ require 'uri'
 
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 require 'types/core'
 
 class Dummy
@@ -23,13 +23,13 @@ class TestStdlibTypes < Minitest::Test
 
   def test_abbrev
     skip "Skip when nowrap is enabled"
-    assert_raises(RDL::Type::TypeError) { Abbrev.abbrev 5}
+    assert_raises(QDL::Type::TypeError) { Abbrev.abbrev 5}
     # From the Ruby stdlib documentation
     s1 = Abbrev.abbrev(['ruby']) # -> {"ruby"=>"ruby", "rub"=>"ruby", "ru"=>"ruby", "r"=>"ruby"}
     ev = {"ruby"=>"ruby", "rub"=>"ruby", "ru"=>"ruby", "r"=>"ruby"}
     assert_equal(s1, ev)
     # Other tests
-    assert_raises(RDL::Type::TypeError) { Abbrev.abbrev Dummy.new }
+    assert_raises(QDL::Type::TypeError) { Abbrev.abbrev Dummy.new }
   end
 
   def test_base64
@@ -140,7 +140,7 @@ class TestStdlibTypes < Minitest::Test
 
   def test_set
     skip "Skip when nowrap is enabled"
-    assert_raises(RDL::Type::TypeError) { _ = Set.new(1,2) }
+    assert_raises(QDL::Type::TypeError) { _ = Set.new(1,2) }
     # From the Ruby stdlib documentation
     s1 = Set.new [1, 2]                   # -> #<Set: {1, 2}>
     s2 = [1, 2].to_set                    # -> #<Set: {1, 2}>

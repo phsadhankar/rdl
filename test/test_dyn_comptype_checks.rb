@@ -1,15 +1,15 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 require 'types/core'
 
 class TestDynChecks < Minitest::Test
-  extend RDL::Annotate
+  extend QDL::Annotate
 
-  RDL::Config.instance.check_comp_types = true
-  RDL::Config.instance.rerun_comp_types = true
+  QDL::Config.instance.check_comp_types = true
+  QDL::Config.instance.rerun_comp_types = true
 
-  type :bar1, "(Integer) -> ``RDL::Type::SingletonType.new(2)``", wrap: false
+  type :bar1, "(Integer) -> ``QDL::Type::SingletonType.new(2)``", wrap: false
   
   type "(Integer) -> Integer", typecheck: :now, wrap: false
   def foo1(x)
@@ -19,21 +19,21 @@ class TestDynChecks < Minitest::Test
   ## First, a silly example. `bar1` (defined below) always returns 1, but its comp type says it always returns 2.
   ## `foo1` will type check properly, but the `bar1` error won't be caught until `foo` is called after type checking.
   def test_foo1_fail
-    RDL::Util.silent_warnings { self.class.class_eval("def bar1(x) 1; end") } 
-    assert_raises(RDL::Type::TypeError) { self.class.new(nil).foo1(1) }
+    QDL::Util.silent_warnings { self.class.class_eval("def bar1(x) 1; end") } 
+    assert_raises(QDL::Type::TypeError) { self.class.new(nil).foo1(1) }
   end
 
   ## If we redefine `bar1`, it should work.
 
   def test_foo1_pass
-    RDL::Util.silent_warnings { self.class.class_eval("def bar1(x) 2; end") }
+    QDL::Util.silent_warnings { self.class.class_eval("def bar1(x) 2; end") }
     assert self.class.new(nil).foo1(1)
   end
 
 
   ## Let's try again, with arrays.
 
-  type :return_array, "() -> ``RDL::Type::TupleType.new(RDL::Type::SingletonType.new(0), RDL::Type::SingletonType.new(0), RDL::Type::SingletonType.new(0))``", wrap: false
+  type :return_array, "() -> ``QDL::Type::TupleType.new(QDL::Type::SingletonType.new(0), QDL::Type::SingletonType.new(0), QDL::Type::SingletonType.new(0))``", wrap: false
 
   type "() -> Integer", typecheck: :now ## this type check should pass
   def calls_array
@@ -42,20 +42,20 @@ class TestDynChecks < Minitest::Test
   end
 
   def test_array_fail
-    RDL::Util.silent_warnings{ self.class.class_eval("def return_array() [1,2,3]; end") }
-    assert_raises(RDL::Type::TypeError) { self.class.new(nil).calls_array }
+    QDL::Util.silent_warnings{ self.class.class_eval("def return_array() [1,2,3]; end") }
+    assert_raises(QDL::Type::TypeError) { self.class.new(nil).calls_array }
   end
 
   def test_array_pass
-    RDL::Util.silent_warnings { self.class.class_eval("def return_array() [0,0,0]; end") }
+    QDL::Util.silent_warnings { self.class.class_eval("def return_array() [0,0,0]; end") }
     assert self.class.new(nil).calls_array
   end
 
   # Now for a slightly-but-not-really more realistic example, with a mock (very small) DB schema.
 
   class People
-    extend RDL::Annotate
-    @people_schema = RDL::Globals.parser.scan_str "#T { name: String, age: Integer }"
+    extend QDL::Annotate
+    @people_schema = QDL::Globals.parser.scan_str "#T { name: String, age: Integer }"
     type 'self.where', "(``raise 'Expected schema' unless @people_schema; @people_schema``) -> Integer", wrap: false
     def self.where(record)
       1 ## not actually looking anything up, so just return a dummy int
@@ -72,12 +72,12 @@ class TestDynChecks < Minitest::Test
   end
 
   def test_where_fail
-    RDL::Util.silent_warnings{ People.class_eval("def person_to_look_up() {name: 'alice', age: '30'}; end") }
-    assert_raises(RDL::Type::TypeError) { People.new.calls_where }
+    QDL::Util.silent_warnings{ People.class_eval("def person_to_look_up() {name: 'alice', age: '30'}; end") }
+    assert_raises(QDL::Type::TypeError) { People.new.calls_where }
   end
     
   def test_where_pass
-    RDL::Util.silent_warnings { People.class_eval("def person_to_look_up() {name: 'alice', age: 30}; end") }
+    QDL::Util.silent_warnings { People.class_eval("def person_to_look_up() {name: 'alice', age: 30}; end") }
     assert People.new.calls_where
   end
 
@@ -85,10 +85,10 @@ class TestDynChecks < Minitest::Test
   # A test where the same method returns different types in different calls:
 
   def self.called_thrice_output(trec, targs)
-    if targs[0].is_a?(RDL::Type::NominalType)
-      RDL::Globals.types[:integer]
-    elsif targs[0].is_a?(RDL::Type::SingletonType)
-      RDL::Type::SingletonType.new(targs[0].val + 1)
+    if targs[0].is_a?(QDL::Type::NominalType)
+      QDL::Globals.types[:integer]
+    elsif targs[0].is_a?(QDL::Type::SingletonType)
+      QDL::Type::SingletonType.new(targs[0].val + 1)
     end
   end
   
@@ -103,13 +103,13 @@ class TestDynChecks < Minitest::Test
   end
 
   def test_multi_pass
-    RDL::Util.silent_warnings { self.class.class_eval "def called_thrice(x) x+1; end" } ## this will satisfy all call return types
+    QDL::Util.silent_warnings { self.class.class_eval "def called_thrice(x) x+1; end" } ## this will satisfy all call return types
     assert self.class.new(nil).multi_caller(0)
   end
 
   def test_multi_fail
-    RDL::Util.silent_warnings { self.class.class_eval "def called_thrice(x) if (x==2) then x+2 else x+1 end; end" } ## silly
-    assert_raises(RDL::Type::TypeError) { multi_caller(0) }
+    QDL::Util.silent_warnings { self.class.class_eval "def called_thrice(x) if (x==2) then x+2 else x+1 end; end" } ## silly
+    assert_raises(QDL::Type::TypeError) { multi_caller(0) }
   end
 
 
@@ -122,7 +122,7 @@ class TestDynChecks < Minitest::Test
 
   def test_op_asgn
     assert self.class.new(nil).op_asgn_test(1)
-    assert_raises(RDL::Type::TypeError) { self.class.new(nil).op_asgn_test(1.5) } ## Because `op_asgn_test` isn't wrapped, this should only raise error once :+ is called    
+    assert_raises(QDL::Type::TypeError) { self.class.new(nil).op_asgn_test(1.5) } ## Because `op_asgn_test` isn't wrapped, this should only raise error once :+ is called    
   end
 
   type "([1,2,3]) -> Integer", typecheck: :now, wrap: false
@@ -132,14 +132,14 @@ class TestDynChecks < Minitest::Test
 
   def test_op_asgn_arr
     assert self.class.new(nil).op_asgn_arr([1,2,3])
-    assert_raises(RDL::Type::TypeError) { self.class.new(nil).op_asgn_arr([1,42, 3]) } ## same issue as above
+    assert_raises(QDL::Type::TypeError) { self.class.new(nil).op_asgn_arr([1,42, 3]) } ## same issue as above
   end
 
 
   # Now, we'll test the re-running of computed types; this has been tested in all the examples above, but here we'll test that it fails correctly.
 
   class CompFail
-    extend RDL::Annotate
+    extend QDL::Annotate
     #@@compfail = 1
 =begin
     def self.get_val()
@@ -150,7 +150,7 @@ class TestDynChecks < Minitest::Test
       @@compfail = v
     end
 
-    type "(``if (get_val == 1) then RDL::Globals.types[:integer] else RDL::Type::UnionType.new(RDL::Globals.types[:integer], RDL::Globals.types[:string]) end``) -> Integer", wrap: false ## pathological type depending on @@compfail
+    type "(``if (get_val == 1) then QDL::Globals.types[:integer] else QDL::Type::UnionType.new(QDL::Globals.types[:integer], QDL::Globals.types[:string]) end``) -> Integer", wrap: false ## pathological type depending on @@compfail
     def bar(x)
       x
     end
@@ -164,8 +164,8 @@ class TestDynChecks < Minitest::Test
 
   def test_rerun_comp_type
     CompFail.class_eval {
-      #RDL::Config.instance.check_comp_types = true
-      #RDL::Config.instance.rerun_comp_types = true
+      #QDL::Config.instance.check_comp_types = true
+      #QDL::Config.instance.rerun_comp_types = true
 
       @@compfail = 1
       def self.get_val()
@@ -176,13 +176,13 @@ class TestDynChecks < Minitest::Test
         @@compfail = v
       end
 
-      type "(``if (get_val == 1) then RDL::Globals.types[:integer] else RDL::Type::UnionType.new(RDL::Globals.types[:integer], RDL::Globals.types[:string]) end``) -> Integer", wrap: false ## pathological type depending on @@compfail
+      type "(``if (get_val == 1) then QDL::Globals.types[:integer] else QDL::Type::UnionType.new(QDL::Globals.types[:integer], QDL::Globals.types[:string]) end``) -> Integer", wrap: false ## pathological type depending on @@compfail
       def bar(x)
         x
       end
 
-      RDL::Config.instance.check_comp_types = true
-      RDL::Config.instance.rerun_comp_types = true
+      QDL::Config.instance.check_comp_types = true
+      QDL::Config.instance.rerun_comp_types = true
       
       type "(Integer) -> Integer", typecheck: :now, wrap: false ## will type check fine
       def foo2(x)
@@ -190,17 +190,17 @@ class TestDynChecks < Minitest::Test
       end
     }
 
-    ## These are needed out here too due to weird orderings involving RDL.reset.
+    ## These are needed out here too due to weird orderings involving QDL.reset.
     assert CompFail.new.foo2(1) ## will run fine
     CompFail.set_val(2) ## change heap
-    assert_raises(RDL::Type::TypeError) { CompFail.new.foo2(1) }
+    assert_raises(QDL::Type::TypeError) { CompFail.new.foo2(1) }
 
-    RDL::Config.instance.check_comp_types = false
-    RDL::Config.instance.rerun_comp_types = false
+    QDL::Config.instance.check_comp_types = false
+    QDL::Config.instance.rerun_comp_types = false
   end
 
-  RDL::Config.instance.check_comp_types = false
-  RDL::Config.instance.rerun_comp_types = false
+  QDL::Config.instance.check_comp_types = false
+  QDL::Config.instance.rerun_comp_types = false
   
   
 end

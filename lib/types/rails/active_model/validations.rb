@@ -1,2 +1,2 @@
-RDL.nowrap :'ActiveModel::Validations'
-RDL.type :'ActiveModel::Validations', :errors, '() -> ActiveModel::Errors'
+QDL.nowrap :'ActiveModel::Validations'
+QDL.type :'ActiveModel::Validations', :errors, '() -> ActiveModel::Errors'

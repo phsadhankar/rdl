@@ -1,2 +1,2 @@
-RDL.type :Fixnum, :*, '(ActiveSupport::Duration) -> ActiveSupport::Duration', version: RDL::Globals::FIXBIG_VERSIONS
-RDL.type :Fixnum, :day, '() -> ActiveSupport::Duration', version: RDL::Globals::FIXBIG_VERSIONS
+QDL.type :Fixnum, :*, '(ActiveSupport::Duration) -> ActiveSupport::Duration', version: QDL::Globals::FIXBIG_VERSIONS
+QDL.type :Fixnum, :day, '() -> ActiveSupport::Duration', version: QDL::Globals::FIXBIG_VERSIONS

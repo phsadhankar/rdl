@@ -1,16 +1,16 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 require 'types/core'
 
 
 class TestStringTypes < Minitest::Test
-  extend RDL::Annotate
+  extend QDL::Annotate
 
   def setup
-    RDL.reset
-    RDL::Config.instance.use_precise_string = true
-    RDL.readd_comp_types
+    QDL.reset
+    QDL::Config.instance.use_precise_string = true
+    QDL.readd_comp_types
   end  
 
   def test_string_methods
@@ -97,7 +97,7 @@ class TestStringTypes < Minitest::Test
         x
       end
     }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :append_fail1 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :append_fail2 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :append_fail1 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :append_fail2 }
   end
 end

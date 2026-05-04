@@ -1,2 +1,2 @@
-RDL.nowrap :'AbstractController::Translation'
-RDL.type :'AbstractController::Translation', :t, '(Symbol or String) -> String'
+QDL.nowrap :'AbstractController::Translation'
+QDL.type :'AbstractController::Translation', :t, '(Symbol or String) -> String'

@@ -7,9 +7,9 @@
 ### Fixed
 - Dynamic type checking of initialize method
 - Bug with handling constants of certain types
-- Broken rdl_attr_* methods
+- Broken qdl_attr_* methods
 - Bug handling optional annotated/dependent types
-- Add RDLAnnotate to rdl_disable
+- Add QDLAnnotate to qdl_disable
 - Type checking of Object class singleton methods
 - #52 Kernel.raise annotation
 - #42 use grandparent type information for methods
@@ -17,19 +17,19 @@
 - #45 handle local constants
 - #62 allow more method names in structural types
 - #34 clean up discussion of how type checking works in README
-- Reordered list of RDL.* methods in README
+- Reordered list of QDL.* methods in README
 - Remove (most) ordering dependencies among test cases
 - Undefined identified issue for Rails assocation types
 - Type check expressions within casts
 - Fix to `var_type` method when called from outside class
-- Add `RDL.query` support for nested classes, e.g., `RDL.query "ActiveRecord::Base#id`
+- Add `QDL.query` support for nested classes, e.g., `QDL.query "ActiveRecord::Base#id`
 
 ### Added
 - Support for type-level computations, including new annotations with
   type-level computations for Array, Hash, String, Integer, Float, and
   database query libraries
 - Dynamic type
-- `RDL.reset` method
+- `QDL.reset` method
 
 ## [2.1.0] - 2017-06-14
 
@@ -53,18 +53,18 @@
 - Support for instantiate! for binding type parameters during static type checking
 - New "check" flag for calls to instantiate! indicating whether we want to check type of receiving object on call
 - More precise static type checking for `Object#class` method
-- Klass argument to rdl_nowrap, rdl_alias
+- Klass argument to qdl_nowrap, qdl_alias
 - Some more support for Rails
 - Support for next/break in block arguments
 - Support for super in static analysis
 
 ### Changed
-- Global variables are now module variables of RDL::Globals
+- Global variables are now module variables of QDL::Globals
 - at_exit handler only installed if `Config.report` or `.guess_types` are accessed
 - Subclass Parser::Diagnostic instead of monkey patching it
 - Replaced `Fixnum` with `Integer` in README (suggested by https://github.com/Dorian)
-- All annotations removed from `Object` and added to `RDL::Annotate`
-- `type_cast`, `instantiate!`, and `deinstantiate!` are now part of the `RDL` module to avoid adding them to `Object`
+- All annotations removed from `Object` and added to `QDL::Annotate`
+- `type_cast`, `instantiate!`, and `deinstantiate!` are now part of the `QDL` module to avoid adding them to `Object`
 
 ## [2.0.1] - 2016-11-11
 
@@ -72,7 +72,7 @@
 - Improved support for modules (still incomplete)
 - Fix a bug with typing self.new
 - Fix bug with annotated return types
-- Fix bug with rdl_query
+- Fix bug with qdl_query
 - Fix bug with running under Rails where type files don't exist (Joel Holdbrooks)
 
 ## [2.0.0] - 2016-08-24
@@ -87,7 +87,7 @@
 ### Changed
 - Modified `self` type to be any instance of the self's class
 - Library types now use new aliases %integer and %numeric instead of the Integer and Numeric classes
-- Instead of requiring `rdl_types.rb`, require `types/core`
+- Instead of requiring `qdl_types.rb`, require `types/core`
 
 ### Fixed
 - Fix issue #14 - allow type/pre/post to coexist, improve docs on dependent types
@@ -111,7 +111,7 @@
 
 ## [1.1.0] - 2016-01-03
 ### Added
-- Added much enhanced `rdl_query` facility and accompanying command-line script.
+- Added much enhanced `qdl_query` facility and accompanying command-line script.
 
 ## [1.0.0] - 2015-12-18
 - First release!

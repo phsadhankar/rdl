@@ -1,19 +1,19 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 
 class TestTypeContract < Minitest::Test
-  include RDL::Type
-  include RDL::Contract
-  extend RDL::Annotate
+  include QDL::Type
+  include QDL::Contract
+  extend QDL::Annotate
 
   def setup
-    RDL.reset
+    QDL.reset
     @p = Parser.new
   end
 
   def test_flat
-    cnil = RDL::Globals.types[:nil].to_contract
+    cnil = QDL::Globals.types[:nil].to_contract
     assert (cnil.check self, nil)
     assert_raises(TypeError) { cnil.check self, true }
     tfixnum = NominalType.new :Integer
@@ -301,14 +301,14 @@ RUBY
   def test_initialize
     self.class.class_eval <<-RUBY, __FILE__, __LINE__
       class TestTypeContract_A
-        extend RDL::Annotate
+        extend QDL::Annotate
         type "(Integer) -> self"
         def initialize(x)
           x
         end
       end
       class TestTypeContract_B
-        extend RDL::Annotate
+        extend QDL::Annotate
         type "(Integer) -> Integer"
         def initialize(x)
           x

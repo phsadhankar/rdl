@@ -1,2 +1,2 @@
-RDL.nowrap :'ActionView::Helpers::SanitizeHelper'
-RDL.type :'ActionView::Helpers::SanitizeHelper', :strip_tags, '(String) -> String'
+QDL.nowrap :'ActionView::Helpers::SanitizeHelper'
+QDL.type :'ActionView::Helpers::SanitizeHelper', :strip_tags, '(String) -> String'

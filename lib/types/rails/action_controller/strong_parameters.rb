@@ -8,11 +8,11 @@ class ActionController::Base
   def self.params_type(typs)
     # TODO: Ick, this is ugly. Once it's obvious how to generalize this kind of reasoning to other cases, clean this up!
     typs.each_pair { |param, param_type|
-      param_type = RDL::Globals.parser.scan_str "#T #{param_type}"
-      meth_type = RDL::Globals.parser.scan_str "(#{param.inspect}) -> #{param_type}" # given singleton symbol arg, get param's return type
-      RDL::Globals.deferred << [self, :context_types, [ActionController::Parameters, :[], meth_type], class_check: self]
+      param_type = QDL::Globals.parser.scan_str "#T #{param_type}"
+      meth_type = QDL::Globals.parser.scan_str "(#{param.inspect}) -> #{param_type}" # given singleton symbol arg, get param's return type
+      QDL::Globals.deferred << [self, :context_types, [ActionController::Parameters, :[], meth_type], class_check: self]
     }
   end
 end
 
-RDL.type :'ActionController::StrongParameters', :params, "() -> Hash<Symbol, Symbol or String>", wrap: false#'() -> ActionController::Parameters'
+QDL.type :'ActionController::StrongParameters', :params, "() -> Hash<Symbol, Symbol or String>", wrap: false#'() -> ActionController::Parameters'

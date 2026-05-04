@@ -1,12 +1,12 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 
 class TestQuery < Minitest::Test
-  include RDL::Type
+  include QDL::Type
 
   def setup
-    RDL.reset
+    QDL.reset
     @p = Parser.new
     @tinteger = NominalType.new Integer
     @tarray = NominalType.new Array

@@ -1,2 +1,2 @@
-RDL.nowrap :'ActionMailer::MessageDelivery'
-RDL.type :'ActionMailer::MessageDelivery', :deliver_now, '() -> Mail::Message'
+QDL.nowrap :'ActionMailer::MessageDelivery'
+QDL.type :'ActionMailer::MessageDelivery', :deliver_now, '() -> Mail::Message'

@@ -1,2 +1,2 @@
-RDL.nowrap :'ActiveRecord::Base'
-RDL.type :'ActiveRecord::Base', :logger, '() -> ActiveSupport::Logger'
+QDL.nowrap :'ActiveRecord::Base'
+QDL.type :'ActiveRecord::Base', :logger, '() -> ActiveSupport::Logger'

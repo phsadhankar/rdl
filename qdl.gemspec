@@ -1,0 +1,28 @@
+# In the top directory
+# gem build qdl.gemspec
+# gem install qdl-1.0.0.beta.1.gem
+
+Gem::Specification.new do |s|
+  s.name        = 'qdl'
+  s.version     = '2.2.0'
+  s.date        = '2019-06-09'
+  s.summary     = 'Ruby type and contract system'
+  s.description = <<-EOF
+QDL is a gem that adds types and contracts to Ruby. QDL includes extensive
+support for specifying method types, which can either be enforced as
+contracts or statically checked.
+EOF
+  s.authors     = ['Jeffrey S. Foster', 'Brianna M. Ren', 'T. Stephen Strickland', 'Alexander T. Yu', 'Milod Kazerounian', 'Sankha Narayan Guria']
+  s.email       = ['qdl-users@googlegroups.com']
+  s.files       = `git ls-files`.split($/)
+  s.executables << 'qdl_query'
+  s.homepage    = 'https://github.com/tupl-tufts/qdl'
+  s.license     = 'BSD-3-Clause'
+  s.add_runtime_dependency 'parser', '~>2.3', '>= 2.3.1.4'
+  s.add_runtime_dependency 'rake', '~>13.0', '>= 13.0.1'
+  s.add_runtime_dependency 'sql-parser', '~>0.0.2'
+  s.add_runtime_dependency 'method_source'
+  s.add_runtime_dependency 'colorize', '~>0.8', '>= 0.8.1'
+  s.add_runtime_dependency 'parlour', '~>2.1.0', '>= 2.1.0'
+  s.add_development_dependency 'coderay', '~>1.1', '>= 1.1.2'
+end

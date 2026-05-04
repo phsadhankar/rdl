@@ -1,2 +1,2 @@
-RDL.nowrap :'Devise::ParameterSanitizer'
-RDL.type :'Devise::ParameterSanitizer', :permit, '(Symbol, Hash<Symbol, Array<Symbol>>) -> NilClass'
+QDL.nowrap :'Devise::ParameterSanitizer'
+QDL.type :'Devise::ParameterSanitizer', :permit, '(Symbol, Hash<Symbol, Array<Symbol>>) -> NilClass'

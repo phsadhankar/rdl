@@ -7,10 +7,10 @@ require 'bigdecimal/math'
 require 'coverage.so'
 
 require 'minitest/autorun'
-require_relative '../lib/rdl.rb'
-require_relative '../lib/rdl_types.rb'
+require_relative '../lib/qdl.rb'
+require_relative '../lib/qdl_types.rb'
 
-RDL::Config.instance.profile_stats
+QDL::Config.instance.profile_stats
 
 class Dummy
   def self.each
@@ -22,13 +22,13 @@ end
 class TestStdlibTypes < Minitest::Test
 
   def test_abbrev
-    assert_raises(RDL::Type::TypeError) { s0 = Abbrev.abbrev 5}
+    assert_raises(QDL::Type::TypeError) { s0 = Abbrev.abbrev 5}
     # From the Ruby stdlib documentation
     s1 = Abbrev.abbrev(['ruby']) # -> {"ruby"=>"ruby", "rub"=>"ruby", "ru"=>"ruby", "r"=>"ruby"}
     ev = {"ruby"=>"ruby", "rub"=>"ruby", "ru"=>"ruby", "r"=>"ruby"}
     assert_equal(s1,ev)
     # Other tests
-    assert_raises(RDL::Type::TypeError) { s2 = Abbrev.abbrev Dummy.new }
+    assert_raises(QDL::Type::TypeError) { s2 = Abbrev.abbrev Dummy.new }
   end
 
   def test_base64
@@ -116,7 +116,7 @@ class TestStdlibTypes < Minitest::Test
   end
   
   def test_set
-    assert_raises(RDL::Type::TypeError) { s6 = Set.new(1,2) }
+    assert_raises(QDL::Type::TypeError) { s6 = Set.new(1,2) }
     # From the Ruby stdlib documentation
     s1 = Set.new [1, 2]                   # -> #<Set: {1, 2}>
     s2 = [1, 2].to_set                    # -> #<Set: {1, 2}>

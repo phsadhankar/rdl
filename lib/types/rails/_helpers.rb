@@ -1,13 +1,13 @@
 # :integer, :bigint, :float, :decimal, :numeric, :datetime, :time, :date, :binary, :boolean.
 # null allowed
 
-RDL.type_alias '%symstr', 'Symbol or String'
+QDL.type_alias '%symstr', 'Symbol or String'
 
-class RDL::Rails
+class QDL::Rails
 
   # [+ rails_type +] is a Rails column type (:string, :integer, etc)
-  # returns a String containing an RDL type
-  def self.column_to_rdl(rails_type)
+  # returns a String containing an QDL type
+  def self.column_to_qdl(rails_type)
     case rails_type
     when :string, :text, :binary
       return 'String'
@@ -44,7 +44,7 @@ class RDL::Rails
     args = []
 
     model.columns_hash.each { |name, col|
-      t = column_to_rdl(col.type)
+      t = column_to_qdl(col.type)
       if col.null
         args << "#{name}: ?#{t}"
       else

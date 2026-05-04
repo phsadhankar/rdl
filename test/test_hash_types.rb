@@ -1,17 +1,17 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 require 'types/core'
 
 
 class TestHashTypes < Minitest::Test
-  extend RDL::Annotate
+  extend QDL::Annotate
 
   def setup
     require 'types/core'
-    RDL.readd_comp_types
-    RDL.type_params :Hash, [:k, :v], :all? unless RDL::Globals.type_params["Hash"]
-    RDL.type_params :Array, [:t], :all? unless RDL::Globals.type_params["Array"]
+    QDL.readd_comp_types
+    QDL.type_params :Hash, [:k, :v], :all? unless QDL::Globals.type_params["Hash"]
+    QDL.type_params :Array, [:t], :all? unless QDL::Globals.type_params["Array"]
   end
 
   def test_hash_methods
@@ -319,12 +319,12 @@ class TestHashTypes < Minitest::Test
         x.values_at(:foo, :blah)
       end
     }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :access_fail1 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :access_fail2 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :assign_fail1 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :assign_fail2 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :assign_fail3 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :create_fail1 }      
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :access_fail1 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :access_fail2 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :assign_fail1 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :assign_fail2 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :assign_fail3 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :create_fail1 }      
   end
 
 end

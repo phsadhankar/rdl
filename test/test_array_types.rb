@@ -1,17 +1,17 @@
 require 'minitest/autorun'
 $LOAD_PATH << File.dirname(__FILE__) + "/../lib"
-require 'rdl'
+require 'qdl'
 require 'types/core'
 
 class TestArrayTypes < Minitest::Test
-  extend RDL::Annotate
+  extend QDL::Annotate
 
   def setup
-    RDL.reset
-    RDL.readd_comp_types
-    RDL::Config.instance.use_precise_string = false
-    RDL.type_params :Array, [:t], :all? unless RDL::Globals.type_params["Array"]
-    RDL.type_params(:Range, [:t], nil, variance: [:+]) { |t| t.member?(self.begin) && t.member?(self.end) } unless RDL::Globals.type_params["Range"]
+    QDL.reset
+    QDL.readd_comp_types
+    QDL::Config.instance.use_precise_string = false
+    QDL.type_params :Array, [:t], :all? unless QDL::Globals.type_params["Array"]
+    QDL.type_params(:Range, [:t], nil, variance: [:+]) { |t| t.member?(self.begin) && t.member?(self.end) } unless QDL::Globals.type_params["Range"]
   end
   
   def test_array_methods
@@ -236,9 +236,9 @@ class TestArrayTypes < Minitest::Test
       end
     }
 
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :append_fail1 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :assign_fail1 }
-    assert_raises(RDL::Typecheck::StaticTypeError) { RDL.do_typecheck :assign_fail2 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :append_fail1 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :assign_fail1 }
+    assert_raises(QDL::Typecheck::StaticTypeError) { QDL.do_typecheck :assign_fail2 }
   end
 
 end
